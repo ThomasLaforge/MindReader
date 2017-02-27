@@ -1,0 +1,99 @@
+let gulp = require('gulp'),
+    // gzip = require('gulp-gzip'),
+    // uglify = require('gulp-uglify'),
+    $ = require('gulp-load-plugins')(),
+    browserSync = require('browser-sync'),
+    reload = browserSync.reload,
+    browserify = require('browserify'),
+    del = require('del'),
+    argv = require('yargs').argv,
+    source = require('vinyl-source-stream'),
+    tsify = require('tsify');
+
+let config = {
+    publicPath: __dirname + '/dist/scripts',
+    app: {
+        path: __dirname + '/src/scripts',
+        main: 'main.ts',
+        result: 'app.js'
+    }
+};
+
+gulp.task('browser-sync', () => {
+    browserSync({
+        open: !!argv.open,
+        notify: !!argv.notify,
+        server: {
+            index: "index.html",
+            baseDir: "./dist"
+        }
+    });
+});
+
+gulp.task('compass', () => {
+    return gulp.src('./src/stylesheets/**/*.{scss,sass}')
+        .pipe($.plumber())
+        .pipe($.compass({
+            css: 'dist/stylesheets',
+            sass: 'src/stylesheets'
+        }))
+        .on('error', () => { this.emit('end'); })
+        .pipe(gulp.dest('dist/stylesheets'));
+});
+
+gulp.task('compile-ts', function() {
+    let bundler = browserify({ basedir: config.app.path })
+        .add(config.app.path + '/' + config.app.main)
+        .plugin(tsify, { target: 'ES5' });
+
+    return bundler.bundle()
+        .on('error', function(error) { console.error(error.toString()); })
+        .pipe(source(config.app.result))
+        //.pipe(uglify())
+        //.pipe(gzip())
+        .pipe(gulp.dest(config.publicPath));
+});
+
+gulp.task('clean', (cb) => {
+    del('./dist', cb);
+});
+
+gulp.task('images', () => {
+    return gulp.src('./src/images/**/*')
+        // .pipe($.imagemin({
+        //     progressive: true
+        // }))
+        .pipe(gulp.dest('./dist/images'))
+})
+
+gulp.task('templates', () => {
+    return gulp.src('src/**/*.{html,php}')
+        .pipe($.plumber())
+        .pipe(gulp.dest('dist/'))
+});
+
+gulp.task('js-libs', () => {
+    return gulp.src([
+            'node_modules/vue/dist/vue.js',
+            'node_modules/vue-router/dist/vue-router.js',
+        ])
+        .pipe(gulp.dest('dist/libs/js'));
+});
+
+gulp.task('css-libs', () => {
+    return gulp.src([
+            'node_modules/bootstrap/dist/css/bootstrap.min.css'
+        ])
+        .pipe(gulp.dest('dist/libs/css'));
+});
+
+gulp.task('build', ['compass', 'compile-ts', 'templates', 'images']);
+
+gulp.task('serve', ['build', 'js-libs', 'css-libs', 'browser-sync'], () => {
+    gulp.watch('src/stylesheets/**/*.{scss,sass}', ['compass', reload]);
+    gulp.watch('src/images/**/*', ['images', reload]);
+    gulp.watch('src/*.{html, php}', ['templates', reload]);
+    gulp.watch('src/scripts/**/*.ts', ['compile-ts', reload]);
+});
+
+gulp.task('default', ['serve']);
