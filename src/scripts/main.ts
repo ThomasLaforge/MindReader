@@ -17,6 +17,13 @@
     import { settings }   from './Vue/settings';
     
 // Main
+Vue.use(VueMaterial)
+
+Vue.material.registerTheme('default', {
+  primary: 'blue',
+//   warn: 'red',
+//   background: 'black'
+})
 
 let app = new Vue({
     el: '#app',
@@ -56,7 +63,7 @@ let app = new Vue({
         },
         updateChoices : function() {
             let newChoices = [];
-            for( let i=1; i < 99 + 1; i++){
+            for( let i=0; i < 99 + 1; i++){
                 if(i %  9 == 0){
                     newChoices.push(this.predictionCard)
                 }

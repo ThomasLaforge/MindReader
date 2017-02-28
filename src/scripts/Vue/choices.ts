@@ -6,8 +6,9 @@ import {card} from './components/card'
 let template = `
     <div class="choices">
         <div class="choice" v-for="(card, index) in choices">
-            <div class="choice-number">{{ index + 1 }} :</div> 
-            <card :card="card" />
+            <div class="choice-number">
+                {{ index }} : <card :card="card" />
+            </div> 
         </div>
     </div>
 `;

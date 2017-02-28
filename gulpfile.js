@@ -76,13 +76,16 @@ gulp.task('js-libs', () => {
     return gulp.src([
             'node_modules/vue/dist/vue.js',
             'node_modules/vue-router/dist/vue-router.js',
+            'node_modules/vue-material/dist/vue-material.debug.js',
+            'node_modules/vue-material/dist/vue-material.js'
         ])
         .pipe(gulp.dest('dist/libs/js'));
 });
 
 gulp.task('css-libs', () => {
     return gulp.src([
-            'node_modules/bootstrap/dist/css/bootstrap.min.css'
+            'node_modules/bootstrap/dist/css/bootstrap.min.css',
+            'node_modules/vue-material/dist/vue-material.css'     
         ])
         .pipe(gulp.dest('dist/libs/css'));
 });

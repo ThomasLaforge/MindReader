@@ -5,9 +5,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>The Mind Reader</title>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="libs/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="libs/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="libs/css/vue-material.css">
     <link rel="stylesheet" href="stylesheets/main.css">
+    
 </head>
 
 <body>
@@ -18,27 +23,34 @@
       to improve your experience.
     </p><![endif]-->
 
-    <div class="container">
-        <h1 class="title-top">Welcome on MindReader</h1>
+    <div id="app">
+        <md-toolbar>
+                <h1 class="md-title" style="flex:1">MindReader</h1>
 
-        <div id="app">
-            <button @click="switchSettings">Settings</button>
+                <md-button class="md-icon-button" @click.native="switchSettings">
+                    <md-icon>settings</md-icon>
+                </md-button>
+            
+        </md-toolbar>
+
+        <md-layout md-flex="100">
             <game-info></game-info>
-            <hr>
             <prediction :card="predictionCard" :show="predictionVisible"></prediction>
-            <button @click="showPrediction" v-if="!predictionVisible">Try to find it !</button>
+            <md-button class="md-primary md-raised" @click.native="showPrediction" v-if="!predictionVisible">Try to find it !</md-button>
             <choices :choices="choices" :prediction="predictionCard"></choices>
-            <settings :visible="settingsVisible" :jokers="withJokers" @change-prediction="updatePrediction"></settings>
-        </div>
+        </md-layout>
+        <settings :visible="settingsVisible" :jokers="withJokers" @change-prediction="updatePrediction"></settings>
+    </div>
 
-        <!-- - - - - - - - -->
-        <!--    Scripts    -->
-        <!-- - - - - - - - -->
-        <script src="libs/js/vue.js"></script>
-        <script src="libs/js/vue-router.js"></script>
-        <script src="scripts/app.js"></script>
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
-        <!--<script>
+    <!-- - - - - - - - -->
+    <!--    Scripts    -->
+    <!-- - - - - - - - -->
+    <script src="libs/js/vue.js"></script>
+    <script src="libs/js/vue-router.js"></script>
+    <script src="libs/js/vue-material.debug.js"></script>
+    <script src="scripts/app.js"></script>
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID.-->
+    <!--<script>
       (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
       function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
       e=o.createElement(i);r=o.getElementsByTagName(i)[0];
