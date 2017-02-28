@@ -7,8 +7,14 @@ let template = `
     <div class="choices">
         <div class="choice" v-for="(card, index) in choices">
             <div class="choice-number">
-                {{ index }} : <card :card="card" />
-            </div> 
+                {{ index < 10 ? '&nbsp; ' + index : index }}
+            </div>
+            <div class="choice-separator">
+                &nbsp; : &nbsp;
+            </div>
+            <div class="choice-card">
+                <card :card="card" />
+            </div>
         </div>
     </div>
 `;

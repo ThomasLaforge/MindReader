@@ -6,9 +6,22 @@ class Card implements CardInterface {
 	private _color: CardSuit;
 
 
-	constructor(value: number, color: CardSuit) {
+	constructor(value: number, color: number|CardSuit) {
 		this._value = value;
 		this._color = color;
+	}
+
+	getColorName(){
+		switch (this.color) {
+			case CardSuit.Hearts:
+				return 'hearts'
+			case CardSuit.Diamonds:
+				return 'diamonds'
+			case CardSuit.Clubs:
+				return 'clubs'
+			case CardSuit.Spades:
+				return 'spades'
+		}
 	}
 
 	getStringifyColor(){

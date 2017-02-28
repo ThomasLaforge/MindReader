@@ -1,17 +1,20 @@
 @import 'card';
+$margin_bottom_default: 30px;
 body {
     box-sizing: border-box !important;
-    // background-color: rgba(black, 0.5) !important;
-    padding-bottom: 50px;
+    padding-bottom: $margin_bottom_default;
 }
 
-h1,
-.title-top {
-    text-align: center;
+[v-cloak] {
+    display: none;
 }
 
-.game-save-state-zone table {
-    width: 100%;
+.md-layout {
+    flex-direction: column;
+}
+
+.game-info {
+    padding: 15px;
 }
 
 .choices {
@@ -22,4 +25,36 @@ h1,
 
 .choice {
     width: 10%;
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (max-width: 640px) {
+    .choice {
+        width: 20%;
+    }
+}
+
+.prediction {
+    margin: auto;
+    margin-bottom: $margin_bottom_default;
+    text-align: center;
+    font-size: 30px;
+    line-height: 100px;
+    width: 100px;
+    height: 100px;
+    border: solid 2px black;
+    border-radius: 5px;
+    background-color: grey;
+    cursor: pointer;
+}
+
+.prediction-show {
+    background-color: inherit;
+    cursor: initial;
+}
+
+.btn-show-prediction {
+    margin: auto;
+    margin-bottom: $margin_bottom_default;
 }

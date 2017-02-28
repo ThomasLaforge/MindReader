@@ -1,17 +1,36 @@
 // imports
-    import { Deck }          from './Deck';
-    import { Card }          from './Card';    
-    import * as _            from 'lodash'
+	import { Deck } from './Deck';
+	import { Card } from './Card';    
+	import * as _   from 'lodash'
 // -------
 
 export class Game {
 
     private _deck: Deck;
 	private _prediction: Card;
+	private _choices: Array<Card>;
 
-	constructor(deck: Deck = new Deck(), prediction? : Card) {
+	constructor(deck: Deck = new Deck(), prediction? : Card, choices? : Array<Card>) {
         this.deck = deck; 
-		this.prediction = prediction ? prediction : this.getRandomPrediction();
+		if(prediction){ this.prediction = prediction } else { this.updatePrediction(); }
+		if(choices){ this.choices = choices } else { this.updateChoices(); }
+	}
+
+	updatePrediction(card? : Card){
+		this.prediction = card ? card : this.getRandomPrediction()
+	}
+
+	updateChoices(){
+		let newChoices = [];
+		for( let i=0; i < 99 + 1; i++){
+			if(i %  9 == 0){
+				newChoices.push(this.prediction)
+			}
+			else {
+				newChoices.push(this.deck.getCopyOfRandomCard())
+			}
+		}
+		this.choices = newChoices;
 	}
 
 	getRandomPrediction() : Card{
@@ -34,6 +53,15 @@ export class Game {
 	public set prediction(value: Card) {
 		this._prediction = value;
 	}
+
+	public get choices(): Array<Card> {
+		return this._choices;
+	}
+
+	public set choices(value: Array<Card>) {
+		this._choices = value;
+	}
+	
 	
 //------------------- 
     

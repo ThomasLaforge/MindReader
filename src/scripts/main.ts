@@ -15,30 +15,39 @@
     import { choices }      from './Vue/choices';
     import { prediction }   from './Vue/prediction';
     import { settings }   from './Vue/settings';
+    // import { main }   from './Vue/main';
     
 // Main
 Vue.use(VueMaterial)
-
 Vue.material.registerTheme('default', {
   primary: 'blue',
 //   warn: 'red',
 //   background: 'black'
 })
 
+// const routes = [
+//   { path: '/', component: main },
+//   { path: '/settings', component: settings }
+// ]
+
+// const router = new VueRouter({
+//   routes
+// })
+
 let app = new Vue({
     el: '#app',
-    data: (): { game: Game, predictionCard:Card, predictionVisible: boolean, withJokers: boolean, settingsVisible: boolean, choices: Array<Card>, deck: Deck } => {
+    // router,
+    data: (): { game: Game, predictionVisible: boolean, withJokers: boolean, settingsVisible: boolean} => {
         return {
             game : newGame,
-            predictionCard : newGame.prediction,
             predictionVisible : false,
             withJokers: false,
-            settingsVisible: false,
-            choices: [],
-            deck: newGame.deck
+            settingsVisible: false
         }
     },
-    computed: {     
+    computed: {
+        predictionCard : function(){ return this.game.prediction },
+        choices : function(){ return  this.game.choices }
     },
     components:{
         gameInfo,
@@ -53,26 +62,22 @@ let app = new Vue({
         showPrediction : function(){
             this.predictionVisible = true
         },
-        updatePrediction : function(card: Card){
-            console.log('update prediction')
-            this.predictionCard = card
+        updatePrediction : function(card?: Card){
+            this.game.updatePrediction(card)
             this.updateChoices()
+            this.predictionVisible = false            
         },
         switchSettings : function(){
             this.settingsVisible = !this.settingsVisible
         },
         updateChoices : function() {
-            let newChoices = [];
-            for( let i=0; i < 99 + 1; i++){
-                if(i %  9 == 0){
-                    newChoices.push(this.predictionCard)
-                }
-                else {
-                    newChoices.push(this.deck.getCopyOfRandomCard())
-                }
-            }
-            console.log('update choices')
-            this.choices = newChoices;
+            this.game.updateChoices();
+        },
+        refresh : function(){
+            console.log('refresh')
+            this.updatePrediction()
+            this.updateChoices()
+            this.predictionVisible = false
         }
     }
 })

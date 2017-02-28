@@ -5,14 +5,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>The Mind Reader</title>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--<link rel="stylesheet" href="libs/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="libs/css/vue-material.css">
     <link rel="stylesheet" href="stylesheets/main.css">
-    
+
 </head>
 
 <body>
@@ -23,20 +23,24 @@
       to improve your experience.
     </p><![endif]-->
 
-    <div id="app">
+    <div id="app" v-cloak>
         <md-toolbar>
-                <h1 class="md-title" style="flex:1">MindReader</h1>
+            <h1 class="md-title" style="flex:1">MindReader</h1>
 
-                <md-button class="md-icon-button" @click.native="switchSettings">
-                    <md-icon>settings</md-icon>
-                </md-button>
-            
+            <md-button class="md-icon-button" @click.native="refresh">
+                <md-icon>refresh</md-icon>
+            </md-button>
+
+            <md-button class="md-icon-button" @click.native="switchSettings">
+                <md-icon>settings</md-icon>
+            </md-button>
+
         </md-toolbar>
 
-        <md-layout md-flex="100">
+        <md-layout v-if="!settingsVisible" md-flex="100">
             <game-info></game-info>
-            <prediction :card="predictionCard" :show="predictionVisible"></prediction>
-            <md-button class="md-primary md-raised" @click.native="showPrediction" v-if="!predictionVisible">Try to find it !</md-button>
+            <prediction :card="predictionCard" :show="predictionVisible" @show-prediction="showPrediction"></prediction>
+            <md-button class="md-primary md-raised btn-show-prediction" @click.native="showPrediction" v-if="!predictionVisible">cliquer pour connaitre ma prédiction</md-button>
             <choices :choices="choices" :prediction="predictionCard"></choices>
         </md-layout>
         <settings :visible="settingsVisible" :jokers="withJokers" @change-prediction="updatePrediction"></settings>

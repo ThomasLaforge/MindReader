@@ -1,41 +1,49 @@
 import { Card } from '../modules/Card';
 
 let template = `
-    <div class="settings" v-if="visible">
+    <md-layout md-gutter md-flex="100" class="settings" v-if="visible">
         <h2>Settings</h2>
-        <!-- <switch v-model="jokers">Jokers</switch>
-        <switch v-model="fixed-prediction">
-            Fixed prediction
-        </switch> -->
-        <div class="prediction-form">
+        
+        <div>
+            <md-switch v-model="jokers">
+                Jokers
+            </md-switch>
+        </div>
+
+        <div>
+            <md-switch v-model="fixedPrediction" class="md-primary">
+                Fixed prediction
+            </md-switch> 
+        </div>
+
+        <div class="prediction-form" v-if="fixedPrediction">
             <label>Value :</label>
             <input v-model="form_value" />
 
             <label>Color :</label>
-            <input v-model="form_color" />
-
-            <div>{{ form_value }} {{ form_color }}</div>
+            <input v-model="form_color" type="number"/>
             
-            <button @click="updatePrediction">Update Prediction</button>
+            <md-button class="md-primary md-raised" @click.native="updatePrediction">Update Prediction</md-button>
         </div>
-    </div>
+    </md-layout>
 `;
 
 export const settings = {
     template: template,
     props: ['visible', 'jokers'],
-    data : () => {
+    data : () : { form_value : number, form_color : number, fixedPrediction: boolean } => {
         return {
             form_value : 1,
             form_color : 0,
+            fixedPrediction : false,
         }
     },
     components : {
     },
     methods: {
         updatePrediction : function(){
-            console.log('emit updatePrediction')
-            this.$emit('change-prediction', new Card(this.form_value, this.form_color))
+            console.log('emit updatePrediction', this.form_value, this.form_color)
+            this.$emit('change-prediction', new Card(this.form_value, parseInt(this.form_color)))
         }
     }
 }

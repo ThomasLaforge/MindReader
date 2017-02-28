@@ -3,7 +3,12 @@ import { Card } from '../../modules/Card'
 
 let template = `
 <div class="card">
-    {{ card.getStringifyValue() }} {{ card.getStringifyColor() }}
+    <div class="card-value">
+        {{ card.getStringifyValue() }}
+    </div>
+    <div class="card-color" :class=" 'card-color-' + card.getColorName() ">
+        {{ card.getStringifyColor() }}
+    </div>
 </div>
 `
 
